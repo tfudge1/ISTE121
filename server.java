@@ -25,8 +25,10 @@ public class server {
    }
 
    class ProcessThread extends Thread {
-   
-      Socket socket;
+    DataInputStream dis;
+    DataOutputStream dos;
+    boolean ready = false;
+    Socket socket;
       public ProcessThread(Socket s){
          socket = s;
       }
@@ -38,21 +40,27 @@ public class server {
             
             System.out.println("Accepting connection from ip " + ip);
             
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-            
-            int first = dis.readInt();
-            int second = dis.readInt();
-               
-            dos.writeUTF("Sum is: " + (first + second));
-            dos.flush();
-            
-            socket.close();
-            
+            dis = new DataInputStream(socket.getInputStream());
+            dos = new DataOutputStream(socket.getOutputStream());
+
+            //client sends UTF "ready"
+            String clientInit =  dis.readUTF();
+            //do something about adding the two client together 
             
          }catch(Exception ex){
             ex.printStackTrace();
          }
+      }
+      public boolean getReady(){
+          return ready;
+      }
+      public void setReady(boolean _ready){
+        ready = _ready;
+      }
+      public void runGame(){
+          try{
+              
+          }catch(Exception ex){ }
       }
    }
 }
