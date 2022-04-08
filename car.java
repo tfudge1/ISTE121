@@ -11,7 +11,7 @@ public class car{
         for(String str : tempWords){
             words.add(str);
         }
-        
+
     }
     public String getColor(){
         return color;
@@ -22,5 +22,4 @@ public class car{
     public String getWord(int index){
         return words.get(index);
     }
-
 }

@@ -1,3 +1,6 @@
+//client sends UTF with isReady();
+//server sends confirm when two clients are ready 
+
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -100,6 +103,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
     public boolean Disconnect = false;
     private Socket socket;
     public int correctChar = 0;
+    public car myCar;
     //private String address;
     public serverCommunicate(String _address){
         //address = _address;
