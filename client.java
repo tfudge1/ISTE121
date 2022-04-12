@@ -16,16 +16,14 @@ public class client extends Application implements EventHandler<ActionEvent> {
    private VBox root = new VBox(8);
 
    private FlowPane flPane = new FlowPane();
-   private VBox vbox = new VBox();
-   private ProgressBar progressBar = new ProgressBar();
    private String sampletext = "This is some text that you will need to type out and have the program valadate then you will be scored against other players in this fun little game that we have made for out class and did not use any lorem ipsum for because we are cool like that and please give us an A";
-   private Label typeText = new Label(sampletext);
-   private TextField txtArea = new TextField();
 
    private FlowPane flPane2 = new FlowPane();
    private Button startbtn = new Button("Connect");
    private TextField ipConnect = new TextField();
    private Separator separator = new Separator();
+   private Connect connectGUI = new Connect();
+   private Scene connectScene = new Scene(connectGUI,230,300);
 
    public static void main(String[] args) {
       launch(args);
@@ -34,30 +32,21 @@ public class client extends Application implements EventHandler<ActionEvent> {
    // Called automatically after launch sets up javaFX
    public void start(Stage _stage) throws Exception {
       stage = _stage;
-      stage.setTitle("VBox Example");
+      stage.setTitle("Racers");
 
-      flPane2.getChildren().addAll(startbtn,ipConnect);
-
-      typeText.setWrapText(true);
-      typeText.setMaxWidth(450);
-      typeText.setTranslateX(25);
-
-      progressBar.prefWidthProperty().bind(vbox.widthProperty().subtract(20));
-      progressBar.setTranslateX(25);
-
-      txtArea.setTranslateX(25);
-
-      vbox.getChildren().addAll(progressBar,typeText,txtArea);
-      flPane.getChildren().addAll(vbox);
-
-      root.getChildren().addAll(flPane2,separator,flPane);
-
-      flPane.setVisible(false);
+      connectGUI.getConnect().setOnAction(this);
+      connectGUI.getYellow().setOnAction(this);
+      connectGUI.getBlue().setOnAction(this);
+      connectGUI.getGreen().setOnAction(this);
+      connectGUI.getPurple().setOnAction(this);
+      connectGUI.getPink().setOnAction(this);
+      connectGUI.getRed().setOnAction(this);
+      connectGUI.getBlack().setOnAction(this);
+      connectGUI.getOrange().setOnAction(this);
       
-      startbtn.setOnAction(this);
-
       scene = new Scene(root, 500, 300);
-      stage.setScene(scene);
+
+      stage.setScene(connectScene);
       stage.show();
 
    }
@@ -69,18 +58,6 @@ public class client extends Application implements EventHandler<ActionEvent> {
       // Switch on its name
       switch(btn.getText()) {
         case "Connect":
-            /* This is for when you want to check that the connnecting has worked before displaying the racetracks
-            System.out.println("btn clicked");
-            SC = new serverCommunicate(ipConnect.getText());
-            if(SC.checkConnect()){
-                startbtn.setText("Ready");
-                flPane.setVisible(true);
-                ipConnect.setVisible(false);
-                SC.start();
-            }else{
-                System.out.println("failed to connect");
-            }
-            */
             SC = new serverCommunicate(ipConnect.getText());
             SC.start();
             startbtn.setText("Ready");
@@ -110,6 +87,22 @@ public class client extends Application implements EventHandler<ActionEvent> {
         }catch(Exception ex){ }
         System.out.println("Thread started");
     }
+    public void run(){
+       try{
+            dos.writeUTF("READY&WAITING");
+            dos.flush();
+            //read other clients
+           while(true){
+               String serverAction = dis.readUTF();
+                if(serverAction.equals("START")){
+                    dos.writeUTF("STARTED");
+                    dos.flush();
+                }
+           }
+       } catch (Exception ex){
+          ex.printStackTrace();
+       }
+    }
     public void isReady(){
         try{
             dos.writeUTF("ready");
@@ -118,19 +111,6 @@ public class client extends Application implements EventHandler<ActionEvent> {
     }
     public boolean checkConnect(){
         return socket.isConnected();
-    }
-    
-    public void run(){
-       try{
-            //server sends UTF saying that two clients are connected 
-            String start = dis.readUTF();
-            System.out.println(start);
-
-            playGame();
-
-       } catch (Exception ex){
-          ex.printStackTrace();
-       }
     }
     public void playGame(){
         //check inputs while being typed
