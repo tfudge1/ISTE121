@@ -3,6 +3,7 @@
 
 import javafx.application.Application;
 import javafx.event.*;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -30,31 +31,52 @@ public class client extends Application implements EventHandler<ActionEvent> {
     private Button startbtn = new Button("Connect");
     private TextField ipConnect = new TextField();
     private Separator separator = new Separator();
+    //connect screen
+    private VBox ConnectOutter = new VBox(10);
+    private TextField txtfldIp = new TextField();
+    private Button connectbtn = new Button("Connect");
+    private HBox HBoxN1 = new HBox(10);
+    private VBox VBoxN1 = new VBox(10);
+    private VBox VBoxN2 = new VBox(10);
 
-    private FlowPane colorSelect = new FlowPane();
-    private VBox red = new VBox();
-    private VBox blue = new VBox();
-    private VBox green = new VBox();
-    private Button btnRed = new Button("RED");
-    private Button btnBlue = new Button("BLUE");
-    private Button btnGreen = new Button("GREEN");
+    private Button yellow = new Button("Yellow");
+    private Button red = new Button("Red");
+    private Button blue = new Button("Blue");
+    private Button purple = new Button("Purple");
+
+    private Button orange = new Button("Orange");
+    private Button pink = new Button("Pink");
+    private Button black = new Button("Black");
+    private Button green = new Button("Green");
+    public String colorSelected;
+
    public static void main(String[] args) {
       launch(args);
    }
    
    // Called automatically after launch sets up javaFX
-   public void start(Stage _stage) throws Exception {
-      stage = _stage;
-      stage.setTitle("VBox Example");
+    public void start(Stage _stage) throws Exception {
+        stage = _stage;
+        stage.setTitle("VBox Example");
 
-      //still need to add the color select area to the gui and set it disable after selected 
-      btnRed.setTextFill(Color.RED);
-      btnBlue.setTextFill(Color.BLUE);
-      btnGreen.setTextFill(Color.GREEN);
-      red.getChildren().addAll(btnRed);
-      blue.getChildren().addAll(btnBlue);
-      green.getChildren().addAll(btnGreen);
-      colorSelect.getChildren().addAll(red,blue,green);
+        //still need to add the color select area to the gui and set it disable after selected 
+        //connect screen
+        ConnectOutter.getChildren().addAll(txtfldIp,connectbtn,HBoxN1);
+        HBoxN1.getChildren().addAll(VBoxN1,VBoxN2);
+        VBoxN1.getChildren().addAll(yellow,red,blue,purple);
+        VBoxN2.getChildren().addAll(orange,pink,black,green);
+        ConnectOutter.setMaxWidth(300);
+        txtfldIp.setText("IP");
+        ConnectOutter.setAlignment(Pos.TOP_CENTER);
+        HBoxN1.setAlignment(Pos.TOP_CENTER);
+
+        connectbtn.setVisible(false);
+        
+        
+        //Wait GUI
+
+        
+        
 
       flPane2.getChildren().addAll(startbtn,ipConnect);
 
@@ -70,13 +92,27 @@ public class client extends Application implements EventHandler<ActionEvent> {
       vbox.getChildren().addAll(progressBar,typeText,txtArea);
       flPane.getChildren().addAll(vbox);
 
-      root.getChildren().addAll(flPane2,separator,flPane);
+      //root.getChildren().addAll(flPane2,separator,flPane);
+      root.getChildren().addAll(ConnectOutter);
+      root.setAlignment(Pos.TOP_CENTER);
+
+      stage.setMinWidth(500);
+      stage.setMinHeight(400);
 
       flPane.setVisible(false);
       
-      startbtn.setOnAction(this);
+      connectbtn.setOnAction(this);
+      yellow.setOnAction(this);
+      red.setOnAction(this);
+      blue.setOnAction(this);
+      purple.setOnAction(this);
+      orange.setOnAction(this);
+      pink.setOnAction(this);
+      black.setOnAction(this);
+      green.setOnAction(this);
 
-      scene = new Scene(root, 500, 300);
+
+      scene = new Scene(root, 900, 400);
       stage.setScene(scene);
       stage.show();
 
@@ -89,19 +125,11 @@ public class client extends Application implements EventHandler<ActionEvent> {
       // Switch on its name
       switch(btn.getText()) {
         case "Connect":
-            /* This is for when you want to check that the connnecting has worked before displaying the racetracks
-            System.out.println("btn clicked");
-            SC = new serverCommunicate(ipConnect.getText());
-            if(SC.checkConnect()){
-                startbtn.setText("Ready");
-                flPane.setVisible(true);
-                ipConnect.setVisible(false);
-                SC.start();
-            }else{
-                System.out.println("failed to connect");
-            }
-            */
-            SC = new serverCommunicate(ipConnect.getText());
+            ConnectOutter.setVisible(false);
+                //when testing with actual server use:
+            //SC = new serverCommunicate(txtfldIp.getText());
+                //when testing without server use:
+            SC = new serverCommunicate("localhost");
             SC.start();
             startbtn.setText("Ready");
             flPane.setVisible(true);
@@ -110,6 +138,46 @@ public class client extends Application implements EventHandler<ActionEvent> {
         case "Ready":
             System.out.println("ready");
             SC.isReady();
+            break;
+        case "Yellow":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "yellow";
+            break;
+        case "Red":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "red";
+            break;
+        case "Blue":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "blue";
+            break;
+        case "Purple":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "purple";
+            break;
+        case "Ornage":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "orange";
+            break;
+        case "Pink":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "pink";
+            break;
+        case "Black":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "black";
+            break;
+        case "green":
+            HBoxN1.setVisible(false);
+            connectbtn.setVisible(true);
+            colorSelected = "green";
             break;
         }
    }

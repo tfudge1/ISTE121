@@ -1,0 +1,5 @@
+-g
+--module-path
+/Users/nicholashoward-fudge/Desktop/code/Java/ISTE121/javaFXSource/javafx-sdk-17.0.2/lib
+--add-modules=javafx.controls
+server.java
