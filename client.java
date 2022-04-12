@@ -11,25 +11,33 @@ import javafx.stage.*;
 import java.io.*;
 import java.net.*;
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
 
 public class client extends Application implements EventHandler<ActionEvent> {
     private serverCommunicate SC;
-   private Stage stage;
-   private Scene scene;
-   private VBox root = new VBox(8);
+    private Stage stage;
+    private Scene scene;
+    private VBox root = new VBox(8);
 
-   private FlowPane flPane = new FlowPane();
-   private VBox vbox = new VBox();
-   private ProgressBar progressBar = new ProgressBar();
-   private String sampletext = "This is some text that you will need to type out and have the program valadate then you will be scored against other players in this fun little game that we have made for out class and did not use any lorem ipsum for because we are cool like that and please give us an A";
-   private Label typeText = new Label(sampletext);
-   private TextField txtArea = new TextField();
+    private FlowPane flPane = new FlowPane();
+    private VBox vbox = new VBox();
+    private ProgressBar progressBar = new ProgressBar();
+    private String sampletext = "This is some text that you will need to type out and have the program valadate then you will be scored against other players in this fun little game that we have made for out class and did not use any lorem ipsum for because we are cool like that and please give us an A";
+    private Label typeText = new Label(sampletext);
+    private TextField txtArea = new TextField();
 
-   private FlowPane flPane2 = new FlowPane();
-   private Button startbtn = new Button("Connect");
-   private TextField ipConnect = new TextField();
-   private Separator separator = new Separator();
+    private FlowPane flPane2 = new FlowPane();
+    private Button startbtn = new Button("Connect");
+    private TextField ipConnect = new TextField();
+    private Separator separator = new Separator();
 
+    private FlowPane colorSelect = new FlowPane();
+    private VBox red = new VBox();
+    private VBox blue = new VBox();
+    private VBox green = new VBox();
+    private Button btnRed = new Button("RED");
+    private Button btnBlue = new Button("BLUE");
+    private Button btnGreen = new Button("GREEN");
    public static void main(String[] args) {
       launch(args);
    }
@@ -38,6 +46,15 @@ public class client extends Application implements EventHandler<ActionEvent> {
    public void start(Stage _stage) throws Exception {
       stage = _stage;
       stage.setTitle("VBox Example");
+
+      //still need to add the color select area to the gui and set it disable after selected 
+      btnRed.setTextFill(Color.RED);
+      btnBlue.setTextFill(Color.BLUE);
+      btnGreen.setTextFill(Color.GREEN);
+      red.getChildren().addAll(btnRed);
+      blue.getChildren().addAll(btnBlue);
+      green.getChildren().addAll(btnGreen);
+      colorSelect.getChildren().addAll(red,blue,green);
 
       flPane2.getChildren().addAll(startbtn,ipConnect);
 

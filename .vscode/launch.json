@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch server",
+            "request": "launch",
+            "mainClass": "server",
+            "projectName": "ISTE121_95d3bff7"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
