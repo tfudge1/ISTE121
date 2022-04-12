@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Vector;
@@ -14,15 +15,18 @@ public class GameMaster {
     public Game startANewGame() {
         Game g = new Game();
         gameList.add(g);
+        g.start();
         return g;
     }
 
 
     private class Game extends Thread {
 
+
+        public ArrayList<Racer> winner= new ArrayList<>();
+
         private ConcurrentHashMap<String, Racer> racerDict;
         private boolean _isStarted = false;
-
 
         private String sentence;
         private int totalLength;
@@ -34,7 +38,6 @@ public class GameMaster {
         public Game() {
 
             racerDict = new ConcurrentHashMap<>();
-
         }
 
         public void addRacer(String color) {
@@ -44,7 +47,6 @@ public class GameMaster {
                 racerDict.put(uid, r);
 
             }
-
         }
 
         public void updateRacer(String uid, int position) {
@@ -56,8 +58,6 @@ public class GameMaster {
                     refreshRacers(r);
                 }
             }
-
-
         }
 
         public void refreshRacers(Racer updatedRacer) {
@@ -72,20 +72,17 @@ public class GameMaster {
 
         @Override
         public void run() {
-            _isStarted = true;
+            while(!isStarted()){
+                //Await Players
+            }
             while(!checkWinner()){
                 //While the race in progress the racers will be updating their own values so do nothing
-
             }
             System.out.println("The Winners are "+winner.toArray().toString());
             System.out.println(RaceReport());
             _isStarted=false;
-
-
         }
 
-
-        public ArrayList<Racer> winner= new ArrayList<>();
 
         public boolean checkWinner(){
             for(Racer r:racerDict.values()){
@@ -101,7 +98,9 @@ public class GameMaster {
             totalLength = s.split(" ").length;
         }
 
-
+        public void startGame(){
+            _isStarted=true;
+        }
         public String RaceReport(){
             StringBuilder report= new StringBuilder();
             for(Racer r:racerDict.values()){
@@ -109,6 +108,7 @@ public class GameMaster {
             }
             return report.toString();
         }
+
     }
 
     private class Racer {
@@ -158,11 +158,9 @@ public class GameMaster {
 
 
         public ClientHandler(Racer r, Game mainGame) {
-
         }
 
         public void updateRacer(Racer r) {
-
         }
 
 
