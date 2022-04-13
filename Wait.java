@@ -9,8 +9,8 @@ public class Wait extends VBox{
         control.getChildren().addAll(lblWait,btnStart);
         this.getChildren().addAll(control);
     }
-    public void addPlayer(String name){
-        playerGUI player = new playerGUI(name);
+    public void addPlayer(String name, String color){
+        playerGUI player = new playerGUI(name,color);
         this.getChildren().addAll(player);
     }
     public Button getStart(){
@@ -19,7 +19,7 @@ public class Wait extends VBox{
     public class playerGUI extends HBox{
         private Label lblName = new Label("Player");
         private ProgressBar pgbar = new ProgressBar();
-        public playerGUI(String name){
+        public playerGUI(String name, String color){
             lblName.setText(name);
             this.getChildren().addAll(lblName,pgbar);
         }

@@ -61,4 +61,7 @@ public class Connect extends VBox{
     public Button getOrange(){
         return ornage;
     }
+    public TextField getIP(){
+        return IP;
+    }
 }

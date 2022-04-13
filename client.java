@@ -24,6 +24,8 @@ public class client extends Application implements EventHandler<ActionEvent> {
    private Separator separator = new Separator();
    private Connect connectGUI = new Connect();
    private Scene connectScene = new Scene(connectGUI,230,300);
+   private Wait waitGUI = new Wait();
+   private Scene waitScene = new Scene(waitGUI,300,300);
 
    public static void main(String[] args) {
       launch(args);
@@ -43,6 +45,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
       connectGUI.getRed().setOnAction(this);
       connectGUI.getBlack().setOnAction(this);
       connectGUI.getOrange().setOnAction(this);
+      waitGUI.getStart().setOnAction(this);
       
       scene = new Scene(root, 500, 300);
 
@@ -58,11 +61,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
       // Switch on its name
       switch(btn.getText()) {
         case "Connect":
-            SC = new serverCommunicate(ipConnect.getText());
+            SC = new serverCommunicate(connectGUI.getIP().getText());
             SC.start();
-            startbtn.setText("Ready");
-            flPane.setVisible(true);
-            ipConnect.setVisible(false);
+            stage.setScene(waitScene);
             break;
         case "Ready":
             System.out.println("ready");
