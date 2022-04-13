@@ -14,6 +14,12 @@ public class Car {
         wordCount = _wordCount;
         UID = UUID.randomUUID().toString();
     }
+    public Car(String _name, String _color, int _wordCount, String _UID){
+        color = _color;
+        name = _name;
+        wordCount = _wordCount;
+        UID = _UID;
+    }
     public boolean completed(){
         if(wordCount == maxWords){
             return true;
