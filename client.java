@@ -102,6 +102,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
             connectGUI.offColors();
             myColor = "ornage";
             break;
+        case "Start":
+            SC.startReq();
+            break;
     }
 }
     public class serverCommunicate extends Thread{
@@ -157,26 +160,17 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 ex.printStackTrace();
             }
         }
-        public void isReady(){
+        public void startReq(){//send start request and start game if true
             try{
-                dos.writeUTF("ready");
+                dos.writeUTF("STARTREQUEST");
                 dos.flush();
+                if(dis.readBoolean()){
+                    //start game
+                }//else? anything?
             }catch(Exception ex){ }
         }
         public boolean checkConnect(){
             return socket.isConnected();
-        }
-        public void playGame(){
-            //check inputs while being typed
-        }
-        public boolean validate(String typed, String text){
-            //need to find out how to get where the person is in the paragraph to check if the word is right
-            if(typed == text){
-                return true;
-            }else{
-                return false;
-            }
-
         }
     }
 }

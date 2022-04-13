@@ -81,7 +81,7 @@ public class Server{
 
 
       public void startRequest(){
-         boolean result =currentGame.startGame(myCar.getID());
+         boolean result = currentGame.startGame(myCar.getID());
          try{
             dos.writeBoolean(result);
          }catch (Exception ex){ }
