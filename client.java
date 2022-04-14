@@ -8,6 +8,8 @@ import javafx.scene.text.Text;
 import javafx.stage.*;
 import java.io.*; 
 import java.net.*;
+import java.util.ArrayList;
+
 import javafx.application.Platform;
 
 public class client extends Application implements EventHandler<ActionEvent> {
@@ -15,14 +17,8 @@ public class client extends Application implements EventHandler<ActionEvent> {
     private Stage stage;
     private Scene scene;
     private VBox root = new VBox(8);
-
-    private FlowPane flPane = new FlowPane();
     private String sampletext = "This is some text that you will need to type out and have the program valadate then you will be scored against other players in this fun little game that we have made for out class and did not use any lorem ipsum for because we are cool like that and please give us an A";
 
-    private FlowPane flPane2 = new FlowPane();
-    private Button startbtn = new Button("Connect");
-    private TextField ipConnect = new TextField();
-    private Separator separator = new Separator();
     private Connect connectGUI = new Connect();
     private Scene connectScene = new Scene(connectGUI,230,300);
     private Wait waitGUI = new Wait();
@@ -68,7 +64,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
             break;
         case "Ready":
             System.out.println("ready");
-            SC.isReady();
+            //SC.isReady();
             break;
         case "yellow":
             connectGUI.offColors();
@@ -103,7 +99,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
             myColor = "ornage";
             break;
         case "Start":
-            SC.startReq();
+            SC.sendRequest();
             break;
     }
 }
@@ -115,6 +111,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
         private Socket socket;
         public int correctChar = 0;
         public Car thisCar;
+        public ArrayList<Car> otherPlayers = new ArrayList<Car>();
         public serverCommunicate(String _address){//constructor makes new socket
             try{
                 socket = new Socket(_address,12345);
@@ -136,37 +133,62 @@ public class client extends Application implements EventHandler<ActionEvent> {
             try{
                 dos.writeUTF("READY&WAITING");
                 dos.flush();
-                //dis.readUTF();
+                writeCar();
                 int otherRacers = dis.readInt();
-                for(int i = 0; i < otherRacers; i++){
-                    String name = dis.readUTF();
-                    String color = dis.readUTF();
-                    String id = dis.readUTF();
-                    int wordCount = dis.readInt();
-                    Car c = new Car(name,color,wordCount,id);
-                    waitGUI.addPlayer(c.getName(), c.getColor());
-                    //add car to GUI
-                }
-
                 //read other clients
+                for(int i = 0; i < otherRacers; i++){
+                    addRacer();
+                }
                 while(true){
+                    //dis.readUTF();
                     String serverAction = dis.readUTF();
                     if(serverAction.equals("START")){
                         dos.writeUTF("STARTED");
                         dos.flush();
+                    }else if (serverAction.equals("REFRESH")){
+                        updateRacer(dis.readUTF(),dis.readInt());
                     }
                 }
             } catch (Exception ex){
                 ex.printStackTrace();
             }
         }
-        public void startReq(){//send start request and start game if true
+        public void updateRacer(String UID, int WordCount){
+            //find what racer it is with UID, and update their wordcount
+            for(Car c: otherPlayers){
+                if(c.IDis(UID)){
+                    c.setWordCount(WordCount);
+                    //update play GUI
+                }
+            }
+            
+        }
+        public void sendRequest(){
             try{
                 dos.writeUTF("STARTREQUEST");
                 dos.flush();
-                if(dis.readBoolean()){
-                    //start game
-                }//else? anything?
+            }catch(Exception ex){ }
+        }
+        public void writeCar(){
+            try{
+                dos.writeUTF(thisCar.getName());
+                dos.writeUTF(thisCar.getColor());
+                dos.writeInt(thisCar.getWordCount());
+                dos.writeUTF(thisCar.getID());
+                dos.flush();
+            }catch(Exception ex){ }
+        }
+        public void addRacer(){
+            try{
+                //get new car
+                String name = dis.readUTF();
+                String color = dis.readUTF();
+                String id = dis.readUTF();
+                int wordCount = dis.readInt();
+                Car c = new Car(name,color,wordCount,id);
+                otherPlayers.add(c);
+                //add car to GUI
+                waitGUI.addPlayer(c.getName(), c.getColor());
             }catch(Exception ex){ }
         }
         public boolean checkConnect(){

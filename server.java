@@ -64,6 +64,7 @@ public class Server{
                   Car car = readCar();
                   myCar=car;
                   currentGame.addRacer(car);
+//dont we need to tell the client how many cars there are here?
                }else if(clientAction.equals("STARTED")){
                   updateClient();
                  // checkComplete() -- GameMaster will handle this
@@ -78,11 +79,11 @@ public class Server{
             ex.printStackTrace();
          }
       }
-
-
       public void startRequest(){
          boolean result = currentGame.startGame(myCar.getID());
          try{
+//insted of writeing a boolean how about sending "START" to this client like all the other ones...
+//at least thats how I think it works 
             dos.writeBoolean(result);
          }catch (Exception ex){ }
 
@@ -124,14 +125,15 @@ public class Server{
          String name = null;
          String color = null;
          int wordCount = 0;
+         String UID = null;
 
          try{
             name = dis.readUTF();
             color = dis.readUTF();
             wordCount = dis.readInt();
-
+            UID = dis.readUTF();
          }catch(Exception ex){ }
-         return new Car(name,color,wordCount);
+         return new Car(name,color,wordCount,UID);
       }
 
       public void startGame(String sentence){

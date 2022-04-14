@@ -57,6 +57,13 @@ public class Car {
     public int getNumWords(){
         return words.size();
     }
+    public boolean IDis(String _UID){
+        if(_UID.equals(UID)){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public void setClientConnection(Server.ProcessThread _clientConnection){
         clientConnection = _clientConnection;
     }
