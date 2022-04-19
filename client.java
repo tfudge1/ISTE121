@@ -3,6 +3,7 @@ import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
@@ -21,8 +22,13 @@ public class client extends Application implements EventHandler<ActionEvent> {
 
     private Connect connectGUI = new Connect();
     private Scene connectScene = new Scene(connectGUI,230,300);
+
     private Wait waitGUI = new Wait();
     private Scene waitScene = new Scene(waitGUI,300,300);
+
+    private Play playGUI = new Play();
+    private Scene playScene = new Scene(playGUI,300,300);
+
     private String myColor;
 
     public static void main(String[] args) {
@@ -43,11 +49,18 @@ public class client extends Application implements EventHandler<ActionEvent> {
       connectGUI.getBlack().setOnAction(this);
       connectGUI.getOrange().setOnAction(this);
       waitGUI.getStart().setOnAction(this);
+      playGUI.getInputArea().setOnAction(this);
       
       scene = new Scene(root, 500, 300);
         stage.setScene(connectScene);
         stage.show();
 
+    }
+    public void handle(KeyEvent kevt){
+        if(kevt.getCode() == kevt.ENTER){
+            playGUI.processInput();
+            playGUI.getInputArea().setText("");
+        }
     }
    public void handle(ActionEvent evt) {
       // Get the button that was clicked
@@ -143,6 +156,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
                     //dis.readUTF();
                     String serverAction = dis.readUTF();
                     if(serverAction.equals("START")){
+                        stage.setScene(playScene);
                         dos.writeUTF("STARTED");
                         dos.flush();
                     }else if (serverAction.equals("REFRESH")){
