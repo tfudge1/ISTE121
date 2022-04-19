@@ -57,10 +57,10 @@ public class client extends Application implements EventHandler<ActionEvent> {
 
     }
     public void handle(KeyEvent kevt){
-        if(kevt.getCode() == kevt.ENTER){
+        /*if(kevt.getCode() == kevt.ENTER){
             playGUI.processInput();
             playGUI.getInputArea().setText("");
-        }
+        }*/
     }
    public void handle(ActionEvent evt) {
       // Get the button that was clicked

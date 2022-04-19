@@ -1,12 +1,13 @@
+import java.util.ArrayList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class Play extends VBox{
     private TextArea txtArea = new TextArea();
     private TextField inputArea = new TextField();
-    public Wait(ArrayList words, ArrayList players){
+    public void Wait(ArrayList<String> words, ArrayList<String> players){
         for(int i =0; i < players.size(); i ++){
-            this.getChildren().addAll(players.get(i));
+            //this.getChildren().addAll(players.get(i));
         }
         this.getChildren().addAll(txtArea);
         for(String word: words){
