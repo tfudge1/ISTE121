@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import java.awt.event.KeyListener;
+import javafx.scene.input.KeyEvent;
 
 public class Play extends VBox{
     private TextArea txtArea = new TextArea();
@@ -15,6 +17,7 @@ public class Play extends VBox{
         }
         this.getChildren().addAll(inputArea);
     }
+
     public void addPlayer(String name, String color){
         playerGUI player = new playerGUI(name,color);
         this.getChildren().addAll(player);
@@ -30,4 +33,8 @@ public class Play extends VBox{
             this.getChildren().addAll(lblName,pgbar);
         }
     }
-}
+    public void validateText(String typed){
+            //if string typed = (what its supposed to ){ }
+        }
+    }
+
