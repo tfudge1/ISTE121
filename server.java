@@ -1,6 +1,8 @@
+package sample;
+
 import java.net.*;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
 
 public class Server{
    public GameMaster gm;
@@ -59,12 +61,16 @@ public class Server{
             //client sends UTF "READY&WAITING"
             while(true){
                String clientAction =  dis.readUTF();
-               //do something about adding the two client together 
+               System.out.println("Client action: " + clientAction);
+
+               //do something about adding the two client together
                if(clientAction.equals("READY&WAITING")){
+                  System.out.println("Client is connected");
                   Car car = readCar();
                   myCar=car;
+                  myCar.setClientConnection(this);
                   currentGame.addRacer(car);
-//dont we need to tell the client how many cars there are here?
+                  sendCarList();
                }else if(clientAction.equals("STARTED")){
                   updateClient();
                  // checkComplete() -- GameMaster will handle this
@@ -87,6 +93,21 @@ public class Server{
             dos.writeBoolean(result);
          }catch (Exception ex){ }
 
+      }
+
+      public void sendCarList(){
+         System.out.println("Sending car list");
+         ArrayList<Car> cars = currentGame.getCarList();
+         try{
+            dos.writeInt(cars.size());
+            for(Car c : cars){
+               if(c!=myCar)
+                  writeCar(c);
+            }
+
+         } catch (IOException _e) {
+            _e.printStackTrace();
+         }
       }
 
       public void removeCar(String uid){
@@ -129,11 +150,20 @@ public class Server{
 
          try{
             name = dis.readUTF();
+            System.out.println("Name: " + name);
             color = dis.readUTF();
+            System.out.println("Color: " + color);
             wordCount = dis.readInt();
+            System.out.println("WordCount: " + wordCount);
             UID = dis.readUTF();
-         }catch(Exception ex){ }
-         return new Car(name,color,wordCount,UID);
+            System.out.println("UID: " + UID);
+            Car c = new Car(name, color, wordCount, UID);
+            System.out.println("Car read: " + c.toString());
+            return c;
+         }catch(Exception ex){
+            ex.printStackTrace();
+         }
+         return null;
       }
 
       public void startGame(String sentence){
@@ -143,5 +173,19 @@ public class Server{
       }catch (Exception ex){ }
 
       }
+      public void endGame(){
+         try{
+            dos.writeUTF("END");
+         }catch (Exception ex){ }
+      }
+      public void addPlayer(Car newPlayer){
+         try{
+            dos.writeUTF("ADDPLAYER");
+            writeCar(newPlayer);
+         }catch(Exception ex){
+            ex.printStackTrace();
+         }
+      }
+
    }
 }

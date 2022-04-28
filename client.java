@@ -1,3 +1,4 @@
+package sample;
 
 import javafx.application.Application;
 import javafx.event.*;
@@ -82,8 +83,8 @@ public class client extends Application implements EventHandler<ActionEvent> {
       switch(btn.getText()) {
         case "Connect":
             SC = new serverCommunicate(connectGUI.getIP().getText());
-            SC.start();
             SC.initCar(connectGUI.getName().getText(),myColor);
+            SC.start();
             stage.setScene(waitScene);
             waitGUI.addPlayer(SC.getThisCarName(), SC.getThisCarColor());
             break;
@@ -157,11 +158,10 @@ public class client extends Application implements EventHandler<ActionEvent> {
         public void run(){
             try{
                 dos.writeUTF("READY&WAITING");
-                dos.flush();
                 writeCar();
                 int otherRacers = dis.readInt();
                 //read other clients
-                for(int i = 0; i < otherRacers; i++){
+                for(int i = 0; i < otherRacers-1; i++){
                     addRacer();
                 }
                 while(true){
@@ -173,6 +173,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
                         dos.flush();
                     }else if (serverAction.equals("REFRESH")){
                         updateRacer(dis.readUTF(),dis.readInt());
+                    }else if(serverAction.equals("ADDPLAYER")){
+                        addRacer();
+
                     }
                 }
             } catch (Exception ex){
@@ -197,28 +200,46 @@ public class client extends Application implements EventHandler<ActionEvent> {
         }
         public void writeCar(){
             try{
+                System.out.println("writing car");
                 dos.writeUTF(thisCar.getName());
                 dos.writeUTF(thisCar.getColor());
                 dos.writeInt(thisCar.getWordCount());
                 dos.writeUTF(thisCar.getID());
                 dos.flush();
-            }catch(Exception ex){ }
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
         }
         public void addRacer(){
             try{
                 //get new car
                 String name = dis.readUTF();
+                System.out.println("name: " + name);
                 String color = dis.readUTF();
+                System.out.println("color: " + color);
                 String id = dis.readUTF();
+                System.out.println("id: " + id);
+
                 int wordCount = dis.readInt();
+                System.out.println("wordcount: " + wordCount);
                 Car c = new Car(name,color,wordCount,id);
+
                 otherPlayers.add(c);
                 //add car to GUI
-                waitGUI.addPlayer(c.getName(), c.getColor());
-            }catch(Exception ex){ }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitGUI.addPlayer(c.getName(), c.getColor());
+                    }
+                });
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
         }
         public boolean checkConnect(){
             return socket.isConnected();
         }
+
+
     }
 }

@@ -1,3 +1,4 @@
+package sample;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,10 +45,19 @@ public class GameMaster {
                     hostUID = car.getID();
                 }
                 racerDict.put(car.getID(), car);
-
+                notifyOthersOfNewPlayer(car);
             }
         }
-
+        public void notifyOthersOfNewPlayer(Car c){
+            for (Car r : racerDict.values()) {
+                if (r != c) {
+                    r.getClientConnection().addPlayer(c);
+                }
+            }
+        }
+        public ArrayList<Car> getCarList(){
+            return new ArrayList<>(racerDict.values());
+        }
         public void updateRacer(String uid, int position) {
             if (isStarted()) {
                 Car r = racerDict.get(uid);
