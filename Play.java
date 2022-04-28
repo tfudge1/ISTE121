@@ -1,7 +1,6 @@
-package sample;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.HashMap;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -15,10 +14,12 @@ public class Play extends VBox{
     private final TextArea txtArea = new TextArea();
     private final TextFlow sentenceDisplay = new TextFlow();
     private final TextField inputArea = new TextField();
-    public ArrayList<CarTrack> carTracks = new ArrayList<>();
+
     private client.serverCommunicate server;
     private Text currentWord;
     private int currentWordIndex;
+    private int sentenceLength;
+    private HashMap<String, CarTrack> carTrackMap = new HashMap<>();
     public Play() {
         this.setSpacing(10);
         this.setStyle("-fx-background-color: #FFFFFF;");
@@ -28,7 +29,6 @@ public class Play extends VBox{
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.SPACE) {
-                    System.out.println("Validating Text");
                     String currentText = inputArea.getText();
                     currentText = sanitizeText(currentText);
                     if(currentText.length() > 0) {
@@ -45,30 +45,36 @@ public class Play extends VBox{
     }
     public void addServer(client.serverCommunicate server) {
         this.server = server;
+        Label lbl = new Label("Server ID: " + server.thisCar.getID());
+        this.getChildren().add(lbl);
     }
     public void setSentences(String sentence) {
         //txtArea.setText(sentence);
         String[] words = sentence.split(" ");
+        sentenceLength = words.length;
         for (String word : words) {
             sentenceDisplay.getChildren().add(new Text(word + " "));
         }
         setCurrentWord(0);
     }
     public void setCurrentWord(int index){
-        currentWordIndex = index;
-        currentWord = (Text) sentenceDisplay.getChildren().get(index);
-        currentWord.setStyle("-fx-fill: #FF0000;");
+        if(index < sentenceLength) {
+            currentWordIndex = index;
+            currentWord = (Text) sentenceDisplay.getChildren().get(index);
+            currentWord.setStyle("-fx-fill: #FF0000;");
+        }else{
+            //TODO: End of sentence
+        }
     }
     public void addCars(Car car) {
         CarTrack carTrack = new CarTrack(car.getName(), car.getColor());
-        carTracks.add(carTrack);
+        carTrackMap.put(car.getID(), carTrack);
         this.getChildren().add(0,carTrack);
     }
     public void addCars(ArrayList<Car> cars) {
         for (Car car : cars) {
             CarTrack carTrack = new CarTrack(car.getName(), car.getColor());
-            carTracks.add(carTrack);
-
+            carTrackMap.put(car.getID(), carTrack);
             this.getChildren().add(0,carTrack);
         }
 
@@ -85,7 +91,14 @@ public class Play extends VBox{
             this.getChildren().addAll(lblName,pgbar);
         }
     }
-
+    public void updateProgressBar(String carID, int wc) {
+        double progress = (double)wc / sentenceLength;
+        System.out.println("PLAY GUI: " + carID + " " + wc + " " + sentenceLength + " " + progress);
+        CarTrack carTrack = carTrackMap.get(carID);
+        System.out.println(carTrack+" is the car track with name "+carTrack.lblName.getText() + " with pgbar " + carTrack.pgbar.getProgress());
+        carTrack.pgbar.setProgress(progress);
+        System.out.println("new Progess "+ carTrack.pgbar.getProgress());
+    }
 
     public String sanitizeText(String typed){
         typed = typed.trim();
@@ -100,8 +113,11 @@ public class Play extends VBox{
                System.out.println("Correct");
                inputArea.clear();
                currentWord.setStyle("-fx-fill: #00FF00;");
+
                setCurrentWord(currentWordIndex + 1);
+               updateProgressBar(server.thisCar.getID(),currentWordIndex );
                server.sendUpdate(currentWordIndex + 1);
+
            }
         }
     }

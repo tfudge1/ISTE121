@@ -1,4 +1,3 @@
-package sample;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -64,6 +63,8 @@ public class GameMaster {
                 if (currentPosition < position) {
                     r.setWordCount(position);
                     refreshRacers(r);
+                }else{
+                    System.out.println("Racer " + r.getID() + " is trying to cheat and is trying to move backwards");
                 }
             }
         }
@@ -71,6 +72,7 @@ public class GameMaster {
         public void refreshRacers(Car updatedRacer) {
             for (Car r : racerDict.values()) {
                 if (r != updatedRacer) {
+                    System.out.println("Sending update to " + r.getID() + " of " + updatedRacer.getID()+"->"+updatedRacer.getWordCount());
                     r.getClientConnection().refreshClients(updatedRacer.getID(), updatedRacer.getWordCount());
                 }
             }

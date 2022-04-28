@@ -1,10 +1,9 @@
-package sample;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class Connect extends VBox{
-    private TextField IP = new TextField("IP");
+    private TextField IP = new TextField("Localhost");
     private TextField name = new TextField("name");
     private Button connect = new Button("Connect");
     private Button yellow = new Button("yellow");

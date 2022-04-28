@@ -1,4 +1,4 @@
-package sample;
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class Server{
                   currentGame.addRacer(car);
                   sendCarList();
                }else if(clientAction.equals("STARTED")){
-                  updateClient();
+                  //updateClient();
                  // checkComplete() -- GameMaster will handle this
                }else if(clientAction.equals("CLOSE")){
                   currentGame.removeCar(myCar.getID());
@@ -91,8 +91,10 @@ public class Server{
          try{
 //insted of writeing a boolean how about sending "START" to this client like all the other ones...
 //at least thats how I think it works 
-            dos.writeBoolean(result);
-         }catch (Exception ex){ }
+           // dos.writeBoolean(result);
+         }catch (Exception ex){
+            ex.printStackTrace();
+         }
 
       }
 
@@ -123,7 +125,10 @@ public class Server{
          int _wordCount = -1;
          try{
             _wordCount = dis.readInt();
-         }catch(Exception ex){ }
+         }catch(Exception ex){
+            ex.printStackTrace();
+         }
+         System.out.println("Updating client: "+myCar.getID()+" with word count: " + _wordCount);
          currentGame.updateRacer(myCar.getID(), _wordCount);
       }
 
@@ -132,7 +137,10 @@ public class Server{
             dos.writeUTF("REFRESH");
             dos.writeUTF(uid);
             dos.writeInt(wordCount);
-         }catch (Exception ex){ }
+            dos.flush();
+         }catch (Exception ex){
+            ex.printStackTrace();
+         }
       }
       public void writeCar(Car Car){//sends car object
          try{

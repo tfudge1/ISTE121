@@ -1,4 +1,3 @@
-package sample;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -167,6 +166,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 while(true){
                     //dis.readUTF();
                     String serverAction = dis.readUTF();
+                    System.out.println("Incoming Action: " + serverAction);
                     if(serverAction.equals("START")){
                         String sentence = dis.readUTF();
                         Platform.runLater(new Runnable() {
@@ -182,11 +182,13 @@ public class client extends Application implements EventHandler<ActionEvent> {
                         });
                         dos.writeUTF("STARTED");
                         dos.flush();
+                        System.out.println("Started Race!");
                     }else if (serverAction.equals("REFRESH")){
-                        updateRacer(dis.readUTF(),dis.readInt());
+                        String carID = dis.readUTF();
+                        int wordCount = dis.readInt();
+                        updateRacer(carID, wordCount);
                     }else if(serverAction.equals("ADDPLAYER")){
                         addRacer();
-
                     }
                 }
             } catch (Exception ex){
@@ -199,7 +201,12 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 if(c.IDis(UID)){
                     c.setWordCount(WordCount);
                     //update play GUI
-
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            playGUI.updateProgressBar(UID, WordCount);
+                        }
+                    });
                 }
             }
             
@@ -207,7 +214,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
         public void sendUpdate(int WordCount){
             try{
                 dos.writeUTF("UPDATE");
-                dos.writeUTF(thisCar.getID());
+                //dos.writeUTF(thisCar.getID());
                 dos.writeInt(WordCount);
                 dos.flush();
             } catch (IOException _e) {
@@ -218,7 +225,11 @@ public class client extends Application implements EventHandler<ActionEvent> {
             try{
                 dos.writeUTF("STARTREQUEST");
                 dos.flush();
-            }catch(Exception ex){ }
+                //boolean success= dis.readBoolean();
+
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
         }
         public void writeCar(){
             try{
