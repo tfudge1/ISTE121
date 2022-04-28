@@ -2,13 +2,14 @@ import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import java.io.*; 
 import java.net.*;
 import java.util.ArrayList;
+import java.awt.event.KeyListener;
+import javafx.scene.input.KeyEvent;
 
 import javafx.application.Platform;
 
@@ -38,29 +39,40 @@ public class client extends Application implements EventHandler<ActionEvent> {
     public void start(Stage _stage) throws Exception {
         stage = _stage;
         stage.setTitle("Racers");
-      connectGUI.getConnect().setOnAction(this);
-      connectGUI.getYellow().setOnAction(this);
-      connectGUI.getBlue().setOnAction(this);
-      connectGUI.getGreen().setOnAction(this);
-      connectGUI.getPurple().setOnAction(this);
-      connectGUI.getPink().setOnAction(this);
-      connectGUI.getRed().setOnAction(this);
-      connectGUI.getBlack().setOnAction(this);
-      connectGUI.getOrange().setOnAction(this);
-      waitGUI.getStart().setOnAction(this);
-
+        connectGUI.getConnect().setOnAction(this);
+        connectGUI.getYellow().setOnAction(this);
+        connectGUI.getBlue().setOnAction(this);
+        connectGUI.getGreen().setOnAction(this);
+        connectGUI.getPurple().setOnAction(this);
+        connectGUI.getPink().setOnAction(this);
+        connectGUI.getRed().setOnAction(this);
+        connectGUI.getBlack().setOnAction(this);
+        connectGUI.getOrange().setOnAction(this);
+        waitGUI.getStart().setOnAction(this);
+        //playGUI.getInputArea().addKeyListener(listener);
       
-      scene = new Scene(root, 500, 300);
+        scene = new Scene(root, 500, 300);
         stage.setScene(connectScene);
         stage.show();
+    }
+    KeyListener listener = new KeyListener() {
+        @Override
+        public void keyTyped(java.awt.event.KeyEvent e) {
+            String typed = playGUI.getInputArea().getText();
+            playGUI.validateText(typed);
+        }
+        @Override
+        public void keyPressed(java.awt.event.KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+        @Override
+        public void keyReleased(java.awt.event.KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+    };
 
-    }
-    public void handle(KeyEvent kevt){
-        /*if(kevt.getCode() == kevt.ENTER){
-            playGUI.processInput();
-            playGUI.getInputArea().setText("");
-        }*/
-    }
    public void handle(ActionEvent evt) {
       // Get the button that was clicked
       Button btn = (Button)evt.getSource();

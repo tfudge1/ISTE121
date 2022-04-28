@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import java.awt.event.KeyListener;
+import javafx.scene.input.KeyEvent;
 
 public class Play extends VBox{
     private final TextArea txtArea = new TextArea();
@@ -38,6 +40,8 @@ public class Play extends VBox{
             this.getChildren().addAll(lblName,pgbar);
         }
     }
+    public void validateText(String typed){
+            //if string typed = (what its supposed to ){ }
+        }
+    }
 
-
-}
