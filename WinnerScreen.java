@@ -20,7 +20,7 @@ public class WinnerScreen extends VBox{
         int index=1;
         for(Car car: placements){
             Label label = new Label(index+". " +car.getName());
-            label.setStyle("-fx-text-fill: " + car.getColor() + ";");
+            label.setStyle("-fx-background-color:  " + car.getColor() + ";-fx-font-size: 28px");
             label.setAlignment(Pos.CENTER);
             this.getChildren().add(label);
         }

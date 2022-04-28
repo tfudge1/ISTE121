@@ -52,7 +52,6 @@ public class client extends Application implements EventHandler<ActionEvent> {
         connectGUI.getPurple().setOnAction(this);
         connectGUI.getPink().setOnAction(this);
         connectGUI.getRed().setOnAction(this);
-        connectGUI.getBlack().setOnAction(this);
         connectGUI.getOrange().setOnAction(this);
         waitGUI.getStart().setOnAction(this);
         //playGUI.getInputArea().addKeyListener(listener);
@@ -96,37 +95,33 @@ public class client extends Application implements EventHandler<ActionEvent> {
             System.out.println("ready");
             //SC.isReady();
             break;
-        case "yellow":
+        case "Yellow":
             connectGUI.offColors();
-            myColor = "Yellow";
+            myColor = "#fdffb6";
             break;
-        case "blue":
+        case "Blue":
             connectGUI.offColors();
-            myColor = "blue";
+            myColor = "#90dbf4";
             break;
-        case "green":
+        case "Green":
             connectGUI.offColors();
-            myColor = "green";
+            myColor = "#b9fbc0";
             break;
-        case "purple":
+        case "Purple":
             connectGUI.offColors();
-            myColor = "purple";
+            myColor = "#cfbaf0";
             break;
-        case "pink":
+        case "Pink":
             connectGUI.offColors();
-            myColor = "pink";
+            myColor = "#f1c0e8";
             break;
-        case "red":
+        case "Red":
             connectGUI.offColors();
-            myColor = "red";
+            myColor = "#ffadad";
             break;
-        case "black":
+        case "Orange":
             connectGUI.offColors();
-            myColor = "black";
-            break;
-        case "ornage":
-            connectGUI.offColors();
-            myColor = "ornage";
+            myColor = "#ffd6a5";
             break;
         case "Start":
             SC.sendRequest();

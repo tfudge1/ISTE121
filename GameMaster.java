@@ -1,4 +1,4 @@
-
+package sample;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -71,10 +71,22 @@ public class GameMaster {
                 if (currentPosition < position) {
                     r.setWordCount(position);
                     refreshRacers(r);
+
                 }else{
                     System.out.println("Racer " + r.getID() + " is trying to cheat and is trying to move backwards");
                 }
             }
+        }
+        public boolean hasEveryoneFinished(){
+            System.out.println("Checking if everyone has finished " + winner.size() + " " + racerDict.size());
+
+            return  (winner.size() == racerDict.size());
+        }
+        public void endGame(){
+            for (Car r : racerDict.values()) {
+                r.getClientConnection().endGame(winner);
+            }
+
         }
 
         public void refreshRacers(Car updatedRacer) {
@@ -128,12 +140,18 @@ public class GameMaster {
                 }
             }*/
         }
-        public void updateRacersWPM(String uid, int wpm) {
-            for(Car r : racerDict.values()){
-                if(!r.getID().equals(uid)){
-                    r.getClientConnection().sendWordsPerMinute(uid, wpm);
+        public void updateRacersWPM(String uid, int wpm, Car c) {
+                for(Car r : racerDict.values()){
+                    if(!r.getID().equals(uid)){
+                        r.getClientConnection().sendWordsPerMinute(uid, wpm);
+                    }
                 }
-            }
+
+                winner.add(c);
+                System.out.println("Winner: " + c.getID());
+                if(hasEveryoneFinished()){
+                    endGame();
+                }
         }
 
         public boolean checkWinner() {
