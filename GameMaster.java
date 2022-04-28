@@ -197,8 +197,9 @@ public class GameMaster {
         }
 
         public void removeCar(String uid) {
+            System.out.println("Removing " + uid);
             racerDict.remove(uid);
-
+            winner.removeIf(r -> r.getID().equals(uid));
         }
 
     }

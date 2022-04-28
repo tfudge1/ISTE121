@@ -58,7 +58,14 @@ public class client extends Application implements EventHandler<ActionEvent> {
       
         scene = new Scene(root, 500, 300);
         stage.setScene(connectScene);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                SC.sendDisconnect();
+            }
+        });
         stage.show();
+
     }
     KeyListener listener = new KeyListener() {
         @Override
@@ -206,6 +213,8 @@ public class client extends Application implements EventHandler<ActionEvent> {
                         });
                     }else if(serverAction.equals("END")){
                         endGame();
+                    }else if(serverAction.equals("REMOVEPLAYER")){
+                        removeRacer();
                     }
                 }
             } catch (Exception ex){
@@ -334,6 +343,23 @@ public class client extends Application implements EventHandler<ActionEvent> {
         }
         public boolean checkConnect(){
             return socket.isConnected();
+        }
+        public void removeRacer(){
+            try{
+                String id = dis.readUTF();
+                otherPlayers.removeIf(c -> c.IDis(id));
+            }catch (IOException _e){
+                _e.printStackTrace();
+            }
+        }
+        public void sendDisconnect(){
+            try{
+                dos.writeUTF("CLOSE");
+                dos.flush();
+                stage.setScene(connectScene);
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
         }
 
 

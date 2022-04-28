@@ -23,7 +23,7 @@ public class Server{
       
          while(true){
             Socket s = ss.accept();
-            System.out.println("Request received from " + s.getInetAddress().getHostName());
+            System.out.println("INBOUND ATTEMPT: " + s.getInetAddress().getHostName());
             new ProcessThread(s, currentGame).start();
          }
       }catch(Exception ex){
@@ -52,7 +52,7 @@ public class Server{
          try{
             String ip = socket.getInetAddress().getHostName();
             
-            System.out.println("Accepting connection from ip " + ip);
+            System.out.println("INBOUND CONNECTION - " + ip);
 
             dis = new DataInputStream(socket.getInputStream());
             dos = new DataOutputStream(socket.getOutputStream());
@@ -60,11 +60,10 @@ public class Server{
             //client sends UTF "READY&WAITING"
             while(true){
                String clientAction =  dis.readUTF();
-               System.out.println("Client action: " + clientAction);
+               System.out.println("INBOUND: " + clientAction);
 
                //do something about adding the two client together
                if(clientAction.equals("READY&WAITING")){
-                  System.out.println("Client is connected");
                   Car car = readCar();
                   myCar=car;
                   myCar.setClientConnection(this);
@@ -76,13 +75,13 @@ public class Server{
                }else if(clientAction.equals("CLOSE")){
                   currentGame.removeCar(myCar.getID());
                   socket.close();
+                  break;
                }else if(clientAction.equals("STARTREQUEST")){
                   startRequest();
                }else if(clientAction.equals("UPDATE")){
                   updateClient();
                }else if(clientAction.equals("FINISHED")){
                   getWordsPerMinute();
-
                }
             }
          }catch(Exception ex){
@@ -132,7 +131,6 @@ public class Server{
          }
       }
       public void sendCarList(){
-         System.out.println("Sending car list");
          ArrayList<Car> cars = currentGame.getCarList();
          try{
             dos.writeInt(cars.size());
