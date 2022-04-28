@@ -1,4 +1,4 @@
-package  sample;
+//package  sample;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -67,23 +67,6 @@ public class client extends Application implements EventHandler<ActionEvent> {
         stage.show();
 
     }
-    KeyListener listener = new KeyListener() {
-        @Override
-        public void keyTyped(java.awt.event.KeyEvent e) {
-           // String typed = playGUI.getInputArea().getText();
-            //playGUI.validateText(typed);
-        }
-        @Override
-        public void keyPressed(java.awt.event.KeyEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-        @Override
-        public void keyReleased(java.awt.event.KeyEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-    };
 
    public void handle(ActionEvent evt) {
       // Get the button that was clicked
@@ -309,6 +292,11 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 System.out.println("color: " + color);
                 String id = dis.readUTF();
                 System.out.println("id: " + id);
+                String isGM = dis.readUTF();
+                if(isGM.equals(id)){
+                    waitGUI.setGMas(name);
+                }
+                
 
                 int wordCount = dis.readInt();
                 System.out.println("wordcount: " + wordCount);

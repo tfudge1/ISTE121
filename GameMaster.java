@@ -1,4 +1,4 @@
-package sample;
+//package sample;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -186,6 +186,10 @@ public class GameMaster {
                 r.getClientConnection().startGame(sentence);
             }
             return true;
+        }
+
+        public String getHostUID(){
+            return hostUID;
         }
 
         public String RaceReport() {
