@@ -1,3 +1,4 @@
+package sample;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -77,6 +78,8 @@ public class Server{
                   socket.close();
                }else if(clientAction.equals("STARTREQUEST")){
                   startRequest();
+               }else if(clientAction.equals("UPDATE")){
+                  updateClient();
                }
             }
          }catch(Exception ex){

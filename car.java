@@ -1,3 +1,4 @@
+package sample;
 import java.util.*;
 public class Car {
     public String name;

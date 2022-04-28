@@ -1,3 +1,4 @@
+package sample;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -110,6 +111,7 @@ public class GameMaster {
                 return false;
             }
             _isStarted = true;
+            addSentence("Practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
             for (Car r : racerDict.values()) {
                 r.getClientConnection().startGame(sentence);
             }

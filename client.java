@@ -1,3 +1,4 @@
+package sample;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -58,8 +59,8 @@ public class client extends Application implements EventHandler<ActionEvent> {
     KeyListener listener = new KeyListener() {
         @Override
         public void keyTyped(java.awt.event.KeyEvent e) {
-            String typed = playGUI.getInputArea().getText();
-            playGUI.validateText(typed);
+           // String typed = playGUI.getInputArea().getText();
+            //playGUI.validateText(typed);
         }
         @Override
         public void keyPressed(java.awt.event.KeyEvent e) {
@@ -127,7 +128,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
             break;
     }
 }
-    public class serverCommunicate extends Thread{
+   public class serverCommunicate extends Thread{
         public String currentDIR;
         public DataInputStream dis;
         public DataOutputStream dos;
@@ -136,6 +137,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
         public int correctChar = 0;
         public Car thisCar;
         public ArrayList<Car> otherPlayers = new ArrayList<Car>();
+
         public serverCommunicate(String _address){//constructor makes new socket
             try{
                 socket = new Socket(_address,12345);
@@ -166,12 +168,15 @@ public class client extends Application implements EventHandler<ActionEvent> {
                     //dis.readUTF();
                     String serverAction = dis.readUTF();
                     if(serverAction.equals("START")){
+                        String sentence = dis.readUTF();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-
+                                playGUI.setSentences(sentence);
                                 playGUI.addCars(otherPlayers);
                                 playGUI.addCars(thisCar);
+                                playGUI.addServer(SC);
+                                playGUI.setCurrentWord(thisCar.getWordCount());
                                 stage.setScene(playScene);
                             }
                         });
@@ -194,9 +199,20 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 if(c.IDis(UID)){
                     c.setWordCount(WordCount);
                     //update play GUI
+
                 }
             }
             
+        }
+        public void sendUpdate(int WordCount){
+            try{
+                dos.writeUTF("UPDATE");
+                dos.writeUTF(thisCar.getID());
+                dos.writeInt(WordCount);
+                dos.flush();
+            } catch (IOException _e) {
+                _e.printStackTrace();
+            }
         }
         public void sendRequest(){
             try{
