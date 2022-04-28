@@ -1,4 +1,4 @@
-//package  sample;
+package sample;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -54,6 +54,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
         connectGUI.getRed().setOnAction(this);
         connectGUI.getOrange().setOnAction(this);
         waitGUI.getStart().setOnAction(this);
+        winnerGUI.getRestartButton().setOnAction(this);
         //playGUI.getInputArea().addKeyListener(listener);
       
         scene = new Scene(root, 500, 300);
@@ -116,6 +117,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
         case "Start":
             SC.sendRequest();
             break;
+        case "Restart":
+            SC.sendRestart();
+            break;
     }
 }
    public class serverCommunicate extends Thread{
@@ -129,6 +133,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
         public ArrayList<Car> otherPlayers = new ArrayList<Car>();
         private Date startTime;
         private int sentenceLength;
+        private boolean isGM=false;
         public serverCommunicate(String _address){//constructor makes new socket
             try{
                 socket = new Socket(_address,12345);
@@ -150,9 +155,18 @@ public class client extends Application implements EventHandler<ActionEvent> {
             try{
                 dos.writeUTF("READY&WAITING");
                 writeCar();
+
                 int otherRacers = dis.readInt();
+                otherRacers--;
+                if(otherRacers == 0){
+                    waitGUI.setGMas(thisCar.getName());
+                    isGM = true;
+                }else{
+                    waitGUI.isPlayer();
+                }
                 //read other clients
-                for(int i = 0; i < otherRacers-1; i++){
+                System.out.println("other racers: " + otherRacers);
+                for(int i = 0; i < otherRacers; i++){
                     addRacer();
                 }
                 while(true){
@@ -173,6 +187,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
                                 playGUI.addCars(thisCar);
                                 playGUI.addServer(SC);
                                 playGUI.setCurrentWord(thisCar.getWordCount());
+                                winnerGUI.clear();
                                 stage.setScene(playScene);
                             }
                         });
@@ -223,7 +238,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        playGUI.clearPlayers();
                         winnerGUI.addWinner(placement);
+                        winnerGUI.setGM(isGM);
                         stage.setScene(winnerScene);
                     }
                 });
@@ -262,6 +279,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
             }
         }
         public void sendRequest(){
+            System.out.println("Sending start request");
             try{
                 dos.writeUTF("STARTREQUEST");
                 dos.flush();
@@ -292,11 +310,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 System.out.println("color: " + color);
                 String id = dis.readUTF();
                 System.out.println("id: " + id);
-                String isGM = dis.readUTF();
-                if(isGM.equals(id)){
-                    waitGUI.setGMas(name);
-                }
-                
+
 
                 int wordCount = dis.readInt();
                 System.out.println("wordcount: " + wordCount);
@@ -349,7 +363,16 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 ex.printStackTrace();
             }
         }
+        public void sendRestart(){
+            try{
 
+                dos.writeUTF("RESTART");
+
+                dos.flush();
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
 
     }
 }

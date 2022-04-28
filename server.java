@@ -1,4 +1,4 @@
-//package sample;
+package sample;//package sample;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -82,6 +82,8 @@ public class Server{
                   updateClient();
                }else if(clientAction.equals("FINISHED")){
                   getWordsPerMinute();
+               }else if(clientAction.equals("RESTART")){
+                  currentGame.restartGame();
                }
             }
          }catch(Exception ex){
@@ -179,7 +181,6 @@ public class Server{
             dos.writeUTF(Car.getColor());
             dos.writeUTF(Car.getID());
             dos.writeInt(Car.getWordCount());
-            dos.writeUTF(currentGame.getHostUID());//
             dos.flush();
          }catch(Exception ex){}
       }

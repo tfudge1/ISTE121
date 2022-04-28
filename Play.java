@@ -1,4 +1,4 @@
-
+package sample;
 //package sample;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,6 +81,14 @@ public class Play extends VBox{
         }
 
     }
+    public void clearPlayers(){
+        this.getChildren().clear();
+        sentenceDisplay.getChildren().clear();
+        currentWordIndex=0;
+        this.getChildren().addAll(sentenceDisplay, inputArea);
+    }
+
+
     public class CarTrack extends VBox{
         private Label lblName = new Label("Player");
         private ProgressBar pgbar = new ProgressBar();

@@ -1,4 +1,4 @@
-//package sample;
+package sample;//package sample;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,7 +86,9 @@ public class GameMaster {
             for (Car r : racerDict.values()) {
                 r.getClientConnection().endGame(winner);
             }
-
+        }
+        public int getRacerSize(){
+            return racerDict.size();
         }
 
         public void refreshRacers(Car updatedRacer) {
@@ -204,6 +206,16 @@ public class GameMaster {
             System.out.println("Removing " + uid);
             racerDict.remove(uid);
             winner.removeIf(r -> r.getID().equals(uid));
+        }
+        public void restartGame(){
+            generateSentence();
+
+            winner.clear();
+            _isStarted=true;
+            for (Car r : racerDict.values()) {
+                r.setWordCount(0);
+                r.getClientConnection().startGame(sentence);
+            }
         }
 
     }

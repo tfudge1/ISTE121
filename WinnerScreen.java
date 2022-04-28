@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class WinnerScreen extends VBox{
 
-
+    Button buttonRestart = new Button("Restart");
     public WinnerScreen(){
         this.setAlignment(Pos.CENTER);
 
@@ -23,7 +23,23 @@ public class WinnerScreen extends VBox{
             label.setStyle("-fx-background-color:  " + car.getColor() + ";-fx-font-size: 28px");
             label.setAlignment(Pos.CENTER);
             this.getChildren().add(label);
+            index++;
         }
+    }
+    public void setGM(boolean gm){
+        if(gm){
+
+
+            buttonRestart .setStyle("-fx-font-size: 28px");
+            this.getChildren().add( buttonRestart );
+
+        }
+    }
+    public Button getRestartButton(){
+        return  buttonRestart ;
+    }
+    public void clear(){
+        this.getChildren().clear();
     }
 
 

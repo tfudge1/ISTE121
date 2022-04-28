@@ -1,4 +1,4 @@
-//package sample;
+package sample;//package sample;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -7,55 +7,33 @@ public class Wait extends VBox{
     private Label lblWait = new Label("WAITING...");
     private Button btnStart = new Button("Start");
 
-    private Label gm = new Label("Game master is:");
-    private TextField gmName = new TextField("");
+    private Label gm = new Label("You are the game master, start when ready");
+
     private Separator separator = new Separator();
     private Label pleaseWait = new Label("Please wait for game to start");
-    private Button start = new Button("start");
+    private Button start = new Button("Start");
     private Separator separator2 = new Separator();
     private Label inLobby = new Label("In Lobby");
     public Wait(){
-        this.getChildren().addAll(gm,gmName,separator,pleaseWait,start,separator2,inLobby);
+        this.getChildren().addAll(gm,separator,pleaseWait,start,separator2,inLobby);
     }
     public void isPlayer(){
+        start.setVisible(false);
         btnStart.setVisible(false);
+        gm.setVisible(false);
         //pgbarHolder.setVisible(true);
     }
     public void setGMas(String name){
-        gmName.setText(name);
+        pleaseWait.setVisible(false);
+        //gmName.setText(name);
     }
     public void addPlayer(String name,String color){
         Label localLabel = new Label(name);
-        switch (color.toLowerCase()){
-            case"orange":
-                localLabel.setStyle("-fx-text-fill: #e68a12;");
-                break;
-            case"purple":
-                localLabel.setStyle("-fx-text-fill: #a312e6;");
-                break;
-            case"black":
-                localLabel.setStyle("-fx-text-fill: #000;");
-                break;
-            case"green":
-                localLabel.setStyle("-fx-text-fill: #00ff00;");
-                break;
-            case"red":
-                localLabel.setStyle("-fx-text-fill: #ff0000;");
-                break;
-            case"blue":
-                localLabel.setStyle("-fx-text-fill: #0000ff;");
-                break;
-            case"pink":
-                localLabel.setStyle("-fx-text-fill: #fa16b6;");
-                break;
-            case"yellow":
-                localLabel.setStyle("-fx-text-fill: #fadc16;");
-                break;
-        }
+        localLabel.setStyle("-fx-background-color:"+color);
         
         this.getChildren().addAll(localLabel);
     }
     public Button getStart(){
-        return btnStart;
+        return start;
     }
 }
