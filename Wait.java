@@ -1,4 +1,4 @@
-package sample;//package sample;
+
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
