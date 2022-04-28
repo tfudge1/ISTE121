@@ -1,28 +1,55 @@
-package sample;
+//package sample;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class Wait extends VBox{
-    private HBox control = new HBox();
-    private Label lblWait = new Label("WAITING...");
-    private Button btnStart = new Button("Start");
+    private Label gm = new Label("Game master: ");
+    private TextField gmName = new TextField();
+    private Separator separator = new Separator();
+    private Label waitForPlayers = new Label("Please wait for players ");
+    private Button start = new Button("start");
+    private ProgressBar pgbar = new ProgressBar();
+    private Separator separator2 = new Separator();
+    private Label inLobby = new Label("In Lobby:");
     public Wait(){
-        control.getChildren().addAll(lblWait,btnStart);
-        this.getChildren().addAll(control);
+        this.getChildren().addAll(gm,gmName,separator,waitForPlayers,start,pgbar,separator2,inLobby);
+        gmName.setEditable(false);
     }
-    public void addPlayer(String name, String color){
-        playerGUI player = new playerGUI(name,color);
-        this.getChildren().addAll(player);
+    public void addPlayer(String name,String color){
+        Label localLabel = new Label(name);
+        switch (color.toLowerCase()){
+            case"orange":
+                localLabel.setStyle("-fx-text-fill: #e68a12;");
+                break;
+            case"purple":
+                localLabel.setStyle("-fx-text-fill: #a312e6;");
+                break;
+            case"black":
+                localLabel.setStyle("-fx-text-fill: #000;");
+                break;
+            case"green":
+                localLabel.setStyle("-fx-text-fill: #00ff00;");
+                break;
+            case"red":
+                localLabel.setStyle("-fx-text-fill: #ff0000;");
+                break;
+            case"blue":
+                localLabel.setStyle("-fx-text-fill: #0000ff;");
+                break;
+            case"pink":
+                localLabel.setStyle("-fx-text-fill: #fa16b6;");
+                break;
+            case"yellow":
+                localLabel.setStyle("-fx-text-fill: #fadc16;");
+                break;
+        }
+        
+        this.getChildren().addAll(localLabel);
     }
     public Button getStart(){
-        return btnStart;
+        return start;
     }
-    public class playerGUI extends HBox{
-        private Label lblName = new Label("Player");
-        private ProgressBar pgbar = new ProgressBar();
-        public playerGUI(String name, String color){
-            lblName.setText(name);
-            this.getChildren().addAll(lblName,pgbar);
-        }
+    public void setGameMaster(String name){
+        gmName.setText(name);
     }
 }
