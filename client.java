@@ -1,4 +1,4 @@
-
+package  sample;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -31,6 +31,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
 
     private Play playGUI = new Play();
     private Scene playScene = new Scene(playGUI,300,300);
+
+    private WinnerScreen winnerGUI =new WinnerScreen();
+    private Scene winnerScene = new Scene(winnerGUI,300,300);
 
     private String myColor;
 
@@ -206,10 +209,39 @@ public class client extends Application implements EventHandler<ActionEvent> {
                                 playGUI.addWordsPerMinute(carID, wpm);
                             }
                         });
+                    }else if(serverAction.equals("END")){
+                        endGame();
                     }
                 }
             } catch (Exception ex){
                 ex.printStackTrace();
+            }
+        }
+        public void endGame(){
+            try{
+                int numCars = dis.readInt();
+                ArrayList<Car> placement = new ArrayList<Car>();
+                for(int i = 0; i < numCars; i++){
+                    String ID = dis.readUTF();
+                    if(ID.equals(thisCar.getID())){
+                        placement.add(thisCar);
+                    }else{
+                        for(Car c : otherPlayers){
+                            if(c.getID().equals(ID)){
+                                placement.add(c);
+                            }
+                        }
+                    }
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        winnerGUI.addWinner(placement);
+                        stage.setScene(winnerScene);
+                    }
+                });
+            } catch (IOException _e) {
+                _e.printStackTrace();
             }
         }
         public void updateRacer(String UID, int WordCount){
