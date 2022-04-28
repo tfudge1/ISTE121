@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -50,7 +48,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
       connectGUI.getBlack().setOnAction(this);
       connectGUI.getOrange().setOnAction(this);
       waitGUI.getStart().setOnAction(this);
-      playGUI.getInputArea().setOnAction(this);
+
       
       scene = new Scene(root, 500, 300);
         stage.setScene(connectScene);
@@ -156,7 +154,15 @@ public class client extends Application implements EventHandler<ActionEvent> {
                     //dis.readUTF();
                     String serverAction = dis.readUTF();
                     if(serverAction.equals("START")){
-                        stage.setScene(playScene);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                playGUI.addCars(otherPlayers);
+                                playGUI.addCars(thisCar);
+                                stage.setScene(playScene);
+                            }
+                        });
                         dos.writeUTF("STARTED");
                         dos.flush();
                     }else if (serverAction.equals("REFRESH")){

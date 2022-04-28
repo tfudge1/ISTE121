@@ -3,31 +3,41 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class Play extends VBox{
-    private TextArea txtArea = new TextArea();
-    private TextField inputArea = new TextField();
-    public void Wait(ArrayList<String> words, ArrayList<String> players){
-        for(int i =0; i < players.size(); i ++){
-            //this.getChildren().addAll(players.get(i));
+    private final TextArea txtArea = new TextArea();
+    private final TextField inputArea = new TextField();
+    public ArrayList<CarTrack> carTracks = new ArrayList<>();
+    public Play() {
+        this.setSpacing(10);
+        this.setStyle("-fx-background-color: #FFFFFF;");
+        this.getChildren().addAll(inputArea,txtArea);
+    }
+
+    public void addCars(Car car) {
+        CarTrack carTrack = new CarTrack(car.getName(), car.getColor());
+        carTracks.add(carTrack);
+        this.getChildren().add(0,carTrack);
+    }
+    public void addCars(ArrayList<Car> cars) {
+        for (Car car : cars) {
+            CarTrack carTrack = new CarTrack(car.getName(), car.getColor());
+            carTracks.add(carTrack);
+
+            this.getChildren().add(0,carTrack);
         }
-        this.getChildren().addAll(txtArea);
-        for(String word: words){
-            txtArea.appendText(word);
-        }
-        this.getChildren().addAll(inputArea);
+
     }
-    public void addPlayer(String name, String color){
-        playerGUI player = new playerGUI(name,color);
-        this.getChildren().addAll(player);
-    }
-    public TextField getInputArea(){
-        return inputArea;
-    }
-    public class playerGUI extends HBox{
+    public class CarTrack extends HBox{
         private Label lblName = new Label("Player");
         private ProgressBar pgbar = new ProgressBar();
-        public playerGUI(String name, String color){
+        public CarTrack (String name, String color){
             lblName.setText(name);
+            lblName.setStyle("-fx-text-fill: " + color + ";-fx-font-weight: bold;");
+            pgbar.setMinWidth(250);
+            pgbar.setStyle("-fx-accent: " + color + ";");
+            pgbar.setProgress(0);
             this.getChildren().addAll(lblName,pgbar);
         }
     }
+
+
 }
