@@ -1,5 +1,11 @@
-
+//package sample;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameMaster {
@@ -65,10 +71,22 @@ public class GameMaster {
                 if (currentPosition < position) {
                     r.setWordCount(position);
                     refreshRacers(r);
+
                 }else{
                     System.out.println("Racer " + r.getID() + " is trying to cheat and is trying to move backwards");
                 }
             }
+        }
+        public boolean hasEveryoneFinished(){
+            System.out.println("Checking if everyone has finished " + winner.size() + " " + racerDict.size());
+
+            return  (winner.size() == racerDict.size());
+        }
+        public void endGame(){
+            for (Car r : racerDict.values()) {
+                r.getClientConnection().endGame(winner);
+            }
+
         }
 
         public void refreshRacers(Car updatedRacer) {
@@ -81,10 +99,34 @@ public class GameMaster {
 
         }
 
+        public void generateSentence(){
+            String fileName = "gatsby.txt";
+            Random r = new Random();
+            int sentence = r.nextInt(300);
+            int length =0 ;
+            try{
+                File file = new File(fileName);
+                Scanner sc = new Scanner(file);
+                while(sc.hasNextLine()){
+                    String snippet = sc.nextLine();
+                    if(length == sentence){
+                        System.out.println("line" + snippet);
+                        snippet = snippet.trim();
+                        addSentence(snippet);
+                        break;
+                    }
+                        length++;
+                }
+                sc.close();
 
+            } catch (FileNotFoundException _e) {
+                _e.printStackTrace();
+            }
+        }
         @Override
         public void run() {
             System.out.println("Filling Lobby");
+            generateSentence();
             /*
             while(true) {
                 if (isStarted()) {
@@ -98,12 +140,18 @@ public class GameMaster {
                 }
             }*/
         }
-        public void updateRacersWPM(String uid, int wpm) {
-            for(Car r : racerDict.values()){
-                if(!r.getID().equals(uid)){
-                    r.getClientConnection().sendWordsPerMinute(uid, wpm);
+        public void updateRacersWPM(String uid, int wpm, Car c) {
+                for(Car r : racerDict.values()){
+                    if(!r.getID().equals(uid)){
+                        r.getClientConnection().sendWordsPerMinute(uid, wpm);
+                    }
                 }
-            }
+
+                winner.add(c);
+                System.out.println("Winner: " + c.getID());
+                if(hasEveryoneFinished()){
+                    endGame();
+                }
         }
 
         public boolean checkWinner() {
@@ -128,7 +176,12 @@ public class GameMaster {
             }
 
             _isStarted = true;
-            addSentence("practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
+
+            //addSentence("Practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
+           // addSentence("This is a test sentence");
+
+            System.out.println("Starting Game: " + sentence);
+            System.out.println("Total Length: " + totalLength);
             for (Car r : racerDict.values()) {
                 r.getClientConnection().startGame(sentence);
             }

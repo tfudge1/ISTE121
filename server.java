@@ -1,4 +1,4 @@
-
+//package sample;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -103,11 +103,23 @@ public class Server{
       public void getWordsPerMinute(){
          try{
             int wpm = dis.readInt();
-            currentGame.updateRacersWPM(myCar.getID(), wpm);
+            currentGame.updateRacersWPM(myCar.getID(), wpm, myCar);
          }catch (Exception ex){
             ex.printStackTrace();
          }
 
+      }
+      public void sendEnd(ArrayList<Car> cars){
+         try{
+            dos.writeUTF("END");
+            dos.writeInt(cars.size());
+            for(Car c : cars){
+               dos.writeUTF(c.getID());
+            }
+            dos.flush();
+         }catch (Exception ex){
+            ex.printStackTrace();
+         }
       }
       public void sendWordsPerMinute(String UID, int wpm){
          try{
@@ -205,9 +217,14 @@ public class Server{
       }catch (Exception ex){ }
 
       }
-      public void endGame(){
+      public void endGame(ArrayList<Car> cars){
          try{
             dos.writeUTF("END");
+            dos.writeInt(cars.size());
+            for(Car c : cars){
+               dos.writeUTF(c.getID());
+            }
+            dos.flush();
          }catch (Exception ex){ }
       }
       public void addPlayer(Car newPlayer){

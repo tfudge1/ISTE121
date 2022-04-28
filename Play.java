@@ -1,5 +1,5 @@
 
-
+//package sample;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -86,7 +86,7 @@ public class Play extends VBox{
         private ProgressBar pgbar = new ProgressBar();
         public CarTrack (String name, String color){
             lblName.setText(name);
-            lblName.setStyle("-fx-text-fill: " + color + ";-fx-font-weight: bold;");
+            lblName.setStyle("-fx-background-color:  " + color + ";-fx-font-weight: bold; -fx-padding: 5px;");
             pgbar.setMinWidth(250);
             pgbar.setStyle("-fx-accent: " + color + ";");
             pgbar.setProgress(0);

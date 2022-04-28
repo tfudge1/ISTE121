@@ -1,32 +1,25 @@
 //package sample;
-import java.util.concurrent.Flow;
-
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class Wait extends VBox{
-    private Label gm = new Label("Game master: ");
-    private TextField gmName = new TextField();
+    private HBox control = new HBox();
+    private Label lblWait = new Label("WAITING...");
+    private Button btnStart = new Button("Start");
+
+    private Label gm = new Label("Game master is:");
+    private TextField gmName = new TextField("");
     private Separator separator = new Separator();
-    private Label waitForPlayers = new Label("Please wait for players ");
+    private Label pleaseWait = new Label("Please wait for game to start");
     private Button start = new Button("start");
-    private FlowPane pgbarHolder = new FlowPane();
-    private ProgressBar pgbar = new ProgressBar();
     private Separator separator2 = new Separator();
-    private Label inLobby = new Label("In Lobby:");
+    private Label inLobby = new Label("In Lobby");
     public Wait(){
-        pgbarHolder.getChildren().addAll(pgbar);
-        pgbar.setMinWidth(250);
-        this.getChildren().addAll(gm,gmName,separator,waitForPlayers,start,pgbarHolder,separator2,inLobby);
-        gmName.setEditable(false);
-    }
-    public void isGM(){
-        start.setVisible(true);
-        pgbarHolder.setVisible(false);
+        this.getChildren().addAll(gm,gmName,separator,pleaseWait,start,separator2,inLobby);
     }
     public void isPlayer(){
-        start.setVisible(false);
-        pgbarHolder.setVisible(true);
+        btnStart.setVisible(false);
+        //pgbarHolder.setVisible(true);
     }
     public void setGMas(String name){
         gmName.setText(name);
@@ -63,9 +56,6 @@ public class Wait extends VBox{
         this.getChildren().addAll(localLabel);
     }
     public Button getStart(){
-        return start;
-    }
-    public void setGameMaster(String name){
-        gmName.setText(name);
+        return btnStart;
     }
 }

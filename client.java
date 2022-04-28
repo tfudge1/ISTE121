@@ -1,4 +1,4 @@
-
+//package  sample;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -32,6 +32,9 @@ public class client extends Application implements EventHandler<ActionEvent> {
     private Play playGUI = new Play();
     private Scene playScene = new Scene(playGUI,300,300);
 
+    private WinnerScreen winnerGUI =new WinnerScreen();
+    private Scene winnerScene = new Scene(winnerGUI,300,300);
+
     private String myColor;
 
     public static void main(String[] args) {
@@ -49,7 +52,6 @@ public class client extends Application implements EventHandler<ActionEvent> {
         connectGUI.getPurple().setOnAction(this);
         connectGUI.getPink().setOnAction(this);
         connectGUI.getRed().setOnAction(this);
-        connectGUI.getBlack().setOnAction(this);
         connectGUI.getOrange().setOnAction(this);
         waitGUI.getStart().setOnAction(this);
         //playGUI.getInputArea().addKeyListener(listener);
@@ -76,37 +78,33 @@ public class client extends Application implements EventHandler<ActionEvent> {
             System.out.println("ready");
             //SC.isReady();
             break;
-        case "yellow":
+        case "Yellow":
             connectGUI.offColors();
-            myColor = "yellow";
+            myColor = "#fdffb6";
             break;
-        case "blue":
+        case "Blue":
             connectGUI.offColors();
-            myColor = "blue";
+            myColor = "#90dbf4";
             break;
-        case "green":
+        case "Green":
             connectGUI.offColors();
-            myColor = "green";
+            myColor = "#b9fbc0";
             break;
-        case "purple":
+        case "Purple":
             connectGUI.offColors();
-            myColor = "purple";
+            myColor = "#cfbaf0";
             break;
-        case "pink":
+        case "Pink":
             connectGUI.offColors();
-            myColor = "pink";
+            myColor = "#f1c0e8";
             break;
-        case "red":
+        case "Red":
             connectGUI.offColors();
-            myColor = "red";
+            myColor = "#ffadad";
             break;
-        case "black":
+        case "Orange":
             connectGUI.offColors();
-            myColor = "black";
-            break;
-        case "ornage":
-            connectGUI.offColors();
-            myColor = "ornage";
+            myColor = "#ffd6a5";
             break;
         case "Start":
             SC.sendRequest();
@@ -189,10 +187,39 @@ public class client extends Application implements EventHandler<ActionEvent> {
                                 playGUI.addWordsPerMinute(carID, wpm);
                             }
                         });
+                    }else if(serverAction.equals("END")){
+                        endGame();
                     }
                 }
             } catch (Exception ex){
                 ex.printStackTrace();
+            }
+        }
+        public void endGame(){
+            try{
+                int numCars = dis.readInt();
+                ArrayList<Car> placement = new ArrayList<Car>();
+                for(int i = 0; i < numCars; i++){
+                    String ID = dis.readUTF();
+                    if(ID.equals(thisCar.getID())){
+                        placement.add(thisCar);
+                    }else{
+                        for(Car c : otherPlayers){
+                            if(c.getID().equals(ID)){
+                                placement.add(c);
+                            }
+                        }
+                    }
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        winnerGUI.addWinner(placement);
+                        stage.setScene(winnerScene);
+                    }
+                });
+            } catch (IOException _e) {
+                _e.printStackTrace();
             }
         }
         public void updateRacer(String UID, int WordCount){
