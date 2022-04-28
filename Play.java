@@ -1,4 +1,5 @@
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,7 +63,8 @@ public class Play extends VBox{
             currentWordIndex = index;
             currentWord = (Text) sentenceDisplay.getChildren().get(index);
             currentWord.setStyle("-fx-fill: #FF0000;");
-        }else{
+        }else if(index == sentenceLength){
+            currentWordIndex = index;
             //TODO: End of sentence
         }
     }
@@ -79,7 +81,7 @@ public class Play extends VBox{
         }
 
     }
-    public class CarTrack extends HBox{
+    public class CarTrack extends VBox{
         private Label lblName = new Label("Player");
         private ProgressBar pgbar = new ProgressBar();
         public CarTrack (String name, String color){
@@ -116,9 +118,14 @@ public class Play extends VBox{
 
                setCurrentWord(currentWordIndex + 1);
                updateProgressBar(server.thisCar.getID(),currentWordIndex );
-               server.sendUpdate(currentWordIndex + 1);
+               server.sendUpdate(currentWordIndex );
 
            }
         }
+    public void addWordsPerMinute(String UID, int wpm){
+        CarTrack carTrack = carTrackMap.get(UID);
+        carTrack.lblName.setText(carTrack.lblName.getText() + ": Words Per Minute: " + wpm);
     }
+}
+
 
