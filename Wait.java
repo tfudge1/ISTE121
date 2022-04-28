@@ -28,6 +28,9 @@ public class Wait extends VBox{
         start.setVisible(false);
         pgbarHolder.setVisible(true);
     }
+    public void setGMas(String name){
+        gmName.setText(name);
+    }
     public void addPlayer(String name,String color){
         Label localLabel = new Label(name);
         switch (color.toLowerCase()){

@@ -169,6 +169,7 @@ public class Server{
             dos.writeUTF(Car.getColor());
             dos.writeUTF(Car.getID());
             dos.writeInt(Car.getWordCount());
+            dos.writeUTF(currentGame.getHostUID());//
             dos.flush();
          }catch(Exception ex){}
       }
