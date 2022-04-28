@@ -128,11 +128,15 @@ public class GameMaster {
             }
 
             _isStarted = true;
+<<<<<<< HEAD
             //addSentence("Practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
             addSentence("This is a test sentence");
 
             System.out.println("Starting Game: " + sentence);
             System.out.println("Total Length: " + totalLength);
+=======
+            addSentence("practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
+>>>>>>> e934d6ad4a149e31a1ac46793173d34cee9dd833
             for (Car r : racerDict.values()) {
                 r.getClientConnection().startGame(sentence);
             }
