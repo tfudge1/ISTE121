@@ -1,3 +1,4 @@
+
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.*;
@@ -9,6 +10,8 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.awt.event.KeyListener;
+import java.util.Date;
+
 import javafx.scene.input.KeyEvent;
 
 import javafx.application.Platform;
@@ -136,7 +139,8 @@ public class client extends Application implements EventHandler<ActionEvent> {
         public int correctChar = 0;
         public Car thisCar;
         public ArrayList<Car> otherPlayers = new ArrayList<Car>();
-
+        private Date startTime;
+        private int sentenceLength;
         public serverCommunicate(String _address){//constructor makes new socket
             try{
                 socket = new Socket(_address,12345);
@@ -169,6 +173,10 @@ public class client extends Application implements EventHandler<ActionEvent> {
                     System.out.println("Incoming Action: " + serverAction);
                     if(serverAction.equals("START")){
                         String sentence = dis.readUTF();
+                        startTime = new Date();
+                        sentenceLength = sentence.split(" ").length;
+                        System.out.println("Sentence: " + sentence);
+                        System.out.println("Length: " + sentenceLength);
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -189,6 +197,15 @@ public class client extends Application implements EventHandler<ActionEvent> {
                         updateRacer(carID, wordCount);
                     }else if(serverAction.equals("ADDPLAYER")){
                         addRacer();
+                    }else if(serverAction.equals("WPM")){
+                        String carID = dis.readUTF();
+                        int wpm = dis.readInt();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                playGUI.addWordsPerMinute(carID, wpm);
+                            }
+                        });
                     }
                 }
             } catch (Exception ex){
@@ -217,6 +234,10 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 //dos.writeUTF(thisCar.getID());
                 dos.writeInt(WordCount);
                 dos.flush();
+                if(WordCount == sentenceLength){
+                    //dos.writeUTF("FINISHED");
+                    finish();
+                }
             } catch (IOException _e) {
                 _e.printStackTrace();
             }
@@ -267,6 +288,21 @@ public class client extends Application implements EventHandler<ActionEvent> {
                 });
             }catch(Exception ex){
                 ex.printStackTrace();
+            }
+        }
+        public void finish(){
+            Date endTime = new Date();
+            long time = endTime.getTime() - startTime.getTime();
+            System.out.println("Time: " + time+ " of " + sentenceLength);
+            int wpm = (int) Math.round(sentenceLength/(time/60000.0));
+            System.out.println("Words per minute: " + wpm);
+            playGUI.addWordsPerMinute(thisCar.getID(),wpm);
+            try{
+                dos.writeUTF("FINISHED");
+                dos.writeInt(wpm);
+                dos.flush();
+            }catch (IOException _e){
+                _e.printStackTrace();
             }
         }
         public boolean checkConnect(){

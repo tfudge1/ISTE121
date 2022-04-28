@@ -80,6 +80,9 @@ public class Server{
                   startRequest();
                }else if(clientAction.equals("UPDATE")){
                   updateClient();
+               }else if(clientAction.equals("FINISHED")){
+                  getWordsPerMinute();
+
                }
             }
          }catch(Exception ex){
@@ -97,7 +100,25 @@ public class Server{
          }
 
       }
+      public void getWordsPerMinute(){
+         try{
+            int wpm = dis.readInt();
+            currentGame.updateRacersWPM(myCar.getID(), wpm);
+         }catch (Exception ex){
+            ex.printStackTrace();
+         }
 
+      }
+      public void sendWordsPerMinute(String UID, int wpm){
+         try{
+            dos.writeUTF("WPM");
+            dos.writeUTF(UID);
+            dos.writeInt(wpm);
+            dos.flush();
+         }catch (Exception ex){
+            ex.printStackTrace();
+         }
+      }
       public void sendCarList(){
          System.out.println("Sending car list");
          ArrayList<Car> cars = currentGame.getCarList();
@@ -177,6 +198,7 @@ public class Server{
 
       public void startGame(String sentence){
       try{
+         System.out.println("OUTBOUND: START");
          dos.writeUTF("START");
          dos.writeUTF(sentence);
       }catch (Exception ex){ }

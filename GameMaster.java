@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,7 +30,8 @@ public class GameMaster {
         private int totalLength;
 
         public boolean isStarted() {
-            return _isStarted && sentence != null && racerDict.values().size() > 1;
+            System.out.println("Is started: " + _isStarted);
+            return _isStarted ;//&& sentence != null; //&& racerDict.values().size() > 1;
         }
 
         public Game() {
@@ -82,21 +84,33 @@ public class GameMaster {
 
         @Override
         public void run() {
-            while (!isStarted()) {
-                //Await Players
-            }
-            while (!checkWinner()) {
-                //While the race in progress the racers will be updating their own values so do nothing
-            }
-            System.out.println("The Winners are " + winner.toArray().toString());
-            System.out.println(RaceReport());
-            _isStarted = false;
+            System.out.println("Filling Lobby");
+            /*
+            while(true) {
+                if (isStarted()) {
+                    //Await players
+                    if (checkWinner()) {
+                        System.out.println("The Winners are " + winner.toArray().toString());
+                        System.out.println(RaceReport());
+                        _isStarted = false;
+                        break;
+                    }
+                }
+            }*/
         }
-
+        public void updateRacersWPM(String uid, int wpm) {
+            for(Car r : racerDict.values()){
+                if(!r.getID().equals(uid)){
+                    r.getClientConnection().sendWordsPerMinute(uid, wpm);
+                }
+            }
+        }
 
         public boolean checkWinner() {
             for (Car r : racerDict.values()) {
+                System.out.println("Checking " + r.getID() + " for winner" + r.getWordCount());
                 if (r.getWordCount() == totalLength) {
+                    System.out.println("Found a match" + r.getID() + " for winner" + r.getWordCount() + " " + totalLength);
                     winner.add(r);
                 }
             }
@@ -112,8 +126,17 @@ public class GameMaster {
             if (!uid.equals(hostUID)) {
                 return false;
             }
+
             _isStarted = true;
+<<<<<<< HEAD
+            //addSentence("Practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
+            addSentence("This is a test sentence");
+
+            System.out.println("Starting Game: " + sentence);
+            System.out.println("Total Length: " + totalLength);
+=======
             addSentence("practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
+>>>>>>> e934d6ad4a149e31a1ac46793173d34cee9dd833
             for (Car r : racerDict.values()) {
                 r.getClientConnection().startGame(sentence);
             }
