@@ -95,7 +95,7 @@ public class client extends Application implements EventHandler<ActionEvent> {
             break;
         case "yellow":
             connectGUI.offColors();
-            myColor = "yellow";
+            myColor = "Yellow";
             break;
         case "blue":
             connectGUI.offColors();

@@ -1,5 +1,11 @@
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameMaster {
@@ -81,10 +87,34 @@ public class GameMaster {
 
         }
 
+        public void generateSentence(){
+            String fileName = "gatsby.txt";
+            Random r = new Random();
+            int sentence = r.nextInt(300);
+            int length =0 ;
+            try{
+                File file = new File(fileName);
+                Scanner sc = new Scanner(file);
+                while(sc.hasNextLine()){
+                    String snippet = sc.nextLine();
+                    if(length == sentence){
+                        System.out.println("line" + snippet);
+                        snippet = snippet.trim();
+                        addSentence(snippet);
+                        break;
+                    }
+                        length++;
+                }
+                sc.close();
 
+            } catch (FileNotFoundException _e) {
+                _e.printStackTrace();
+            }
+        }
         @Override
         public void run() {
             System.out.println("Filling Lobby");
+            generateSentence();
             /*
             while(true) {
                 if (isStarted()) {
@@ -128,15 +158,12 @@ public class GameMaster {
             }
 
             _isStarted = true;
-<<<<<<< HEAD
+
             //addSentence("Practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
-            addSentence("This is a test sentence");
+           // addSentence("This is a test sentence");
 
             System.out.println("Starting Game: " + sentence);
             System.out.println("Total Length: " + totalLength);
-=======
-            addSentence("practice your keyboard typing speed here with words or sentences in many different languages with this free online 1 minute typing test.");
->>>>>>> e934d6ad4a149e31a1ac46793173d34cee9dd833
             for (Car r : racerDict.values()) {
                 r.getClientConnection().startGame(sentence);
             }
